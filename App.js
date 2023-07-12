@@ -2,7 +2,10 @@
 const input = document.querySelector(".filter .input input")
 const options = document.querySelector(".filter .options")
 const centersContainer = document.querySelector(".centers")
+let loading;
 options.addEventListener("click", async (e) => {
+    // loading=true;
+    centersContainer.innerHTML = 'Loading...'
     const res = await fetch("https://isro.vercel.app/api/centres")
     let centers = await res.json()
     centers = centers.centres;
@@ -25,24 +28,29 @@ options.addEventListener("click", async (e) => {
 })
 function render(centers) {
     // console.log(centers)
+    if (centers?.length === 0) {
+        centersContainer.innerHTML = 'No research center found !'
+    }
+    else {
 
-    centers?.map((e) => {
-        const centerChild = document.createElement("table");
-        centerChild.className = 'center';
-        centerChild.innerHTML = `
+        centers?.map((e) => {
+            const centerChild = document.createElement("table");
+            centerChild.className = 'center';
+            centerChild.innerHTML = `
             <tr>
-                <th class='childOfTr'>CENTER</th>
-                <th class='childOfTr'>CITY</th>
-                <th class='childOfTr'>STATE</th>
+            <th class='childOfTr'>CENTER</th>
+            <th class='childOfTr'>CITY</th>
+            <th class='childOfTr'>STATE</th>
             </tr>
             <tr>
-                <td class='childOfTr'>${e.name}</td>
-                <td class='childOfTr'>${e.Place}</td>
-                <td class='childOfTr'>${e.State}</td>
+            <td class='childOfTr'>${e.name}</td>
+            <td class='childOfTr'>${e.Place}</td>
+            <td class='childOfTr'>${e.State}</td>
             </tr>
-        `
-        // centerChild.textContent = e;
-        centersContainer.appendChild(centerChild);
-        // console.log(centerChild)
-    })
+            `
+            // centerChild.textContent = e;
+            centersContainer.appendChild(centerChild);
+            // console.log(centerChild)
+        })
+    }
 }
